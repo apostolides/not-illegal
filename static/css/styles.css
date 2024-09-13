@@ -1,0 +1,29 @@
+pre {
+    text-shadow: rgb(255, 0, 0) 0px 0px 100px;
+    display: flex; /* Enables Flexbox */
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    height: 50vh; /* Full viewport height */
+}  
+
+.centered-container {
+    display: flex; /* Enables Flexbox */
+    justify-content: center; /* Centers items horizontally */
+    align-items: center; /* Centers items vertically */
+    gap: 10px; /* Adds space between the input and button */
+}
+
+input{
+    width: 15%;
+    outline:none;
+}
+
+.hidden {
+    display: none;
+}
+
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

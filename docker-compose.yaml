@@ -1,0 +1,9 @@
+version: "3.9"
+name: "ipiratestuff"
+services:
+  fastapi:
+    build: .
+    ports:
+      - "127.0.0.1:8666:8000"
+    restart: always
+    hostname: ipiratestuff
