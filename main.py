@@ -2,7 +2,7 @@ from fastapi import FastAPI, Response, status
 from fastapi.responses import FileResponse
 from urllib.parse import urlparse, parse_qs
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pathlib import Path
 import yt_dlp
 import re
@@ -10,6 +10,9 @@ import uuid
 
 class youtubeURL(BaseModel):
     url: str
+
+class youtubeSearch(BaseModel):
+    query: str = Field(default='35. Die Toteninsel Emptiness', max_length=256)
 
 app = FastAPI(docs_url=None)
 
@@ -78,6 +81,20 @@ async def do_crime(youtubeURL:youtubeURL, response: Response):
         print(e)
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return {"status": "failed", "message":"failed to parse url."}
+
+@app.post("/search")
+async def do_less_crime(youtubeSearch: youtubeSearch, response: Response):
+    try:
+        ydl_opts = {'format': 'bestaudio', 'noplaylist':True}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            query = youtubeSearch.query
+            meta = ydl.extract_info(f"ytsearch:{query}", download=False)['entries'][0]
+            # print(meta['webpage_url'])
+            return {"status": "ok", "youtube_url":meta['webpage_url']}
+    except Exception as e:
+        print(e)
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return {"status": "failed", "message":"failed to search."}
 
 @app.get("/")
 async def read_index():
